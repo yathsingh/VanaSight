@@ -1,0 +1,9 @@
+opencv-python
+PytorchWildlife
+deep-sort-realtime
+torch
+torchvision
+numpy
+pandas
+matplotlib
+seaborn
