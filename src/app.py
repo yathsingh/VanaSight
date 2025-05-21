@@ -36,13 +36,16 @@ def run_detection_on_source(source, zone, max_frames=None):
         for det in results['detections']: 
             bbox_tuple, conf, category_idx, *_ = det
             x1, y1, x2, y2 = bbox_tuple
-            label = detector.CLASS_NAMES[int(category_idx)]  
-            w, h = x2 - x1, y2 - y1
-            bbox = [x1, y1, w, h]
+            
+            # Add this confidence validation block
+            if conf is None:
+                print(f"Warning: Null confidence in frame {frame_count} | Class: {detector.CLASS_NAMES[int(category_idx)]}")
+                conf = 0.0  # Default value for tracking
+                
             detections.append((
-                [x1, y1, w, h],  
-                float(conf),     
-                int(category_idx) 
+                [x1, y1, x2-x1, y2-y1],  # [x,y,w,h]
+                float(conf),
+                int(category_idx)
             ))
 
         tracks = tracker.update_tracks(detections, frame=frame_rgb)
